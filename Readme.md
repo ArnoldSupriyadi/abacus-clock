@@ -1,6 +1,6 @@
 # 😄 Abacus Clock using Javascript
 
-## 😃 Click here for the 👉 [💥LIVE DEMO]()
+## 😃 Click here for the 👉 [💥LIVE DEMO](https://frontendfunn.github.io/abacus-clock/)
 
 ## ![preview](./images/preview.gif)
 
