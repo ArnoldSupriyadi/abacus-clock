@@ -1,0 +1,207 @@
+:root {
+  --body-background-color: #f9e792;
+  --abacus-height: 200px;
+  --abacus-width: 350px;
+  --bar-height: 10px;
+  --bar-width: 350px;
+  --bar-color: #fcb950;
+  --bar-border-width: 2px;
+  --border-color: #212b51;
+  --bead-line-width: 4px;
+  --bead-line-color: #686e7c;
+  --bead-height: 16px;
+  --bead-width: 16px;
+  --bead-red: #fb394d;
+  --bead-blue: #5292ff;
+  --bead-yellow: #f8d96b;
+  --bead-green: #86d14a;
+  --bead-teal: #78d597;
+}
+$beadHeight: 19px;
+$bottomBeadColors: (
+  "red": "--bead-red",
+  "blue": "--bead-blue",
+  "green": "--bead-green",
+  "yellow": "--bead-yellow",
+);
+$bottomClasses: (
+  "one": 1,
+  "two": 2,
+  "three": 3,
+  "four": 4,
+  "six": 1,
+  "seven": 2,
+  "eight": 3,
+  "nine": 4,
+);
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: var(--body-background-color);
+  font-family: "Rubik", sans-serif;
+  overflow: hidden;
+}
+.container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.abacus {
+  height: var(--abacus-height);
+  width: var(--abacus-width);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.bar {
+  height: var(--bar-height);
+  width: var(--bar-width);
+  border: var(--bar-border-width) solid var(--border-color);
+  background-color: var(--bar-color);
+  border-radius: 40px;
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    left: 0;
+    right: 0;
+    bottom: 70%;
+    margin: auto;
+  }
+}
+
+.beads-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  list-style-type: none;
+  &-top {
+    flex-grow: 2;
+  }
+  &-bottom {
+    flex-grow: 4;
+  }
+  .bead-line {
+    height: 100%;
+    width: var(--bead-line-width);
+    border: 2px solid var(--border-color);
+    position: relative;
+    border-radius: 40px;
+    background-color: var(--bead-line-color);
+    .display-number {
+      position: absolute;
+      top: calc(-1.5 * var(--bar-height));
+      left: 50%;
+      height: 40px;
+      width: 40px;
+      margin: auto;
+      transform: translateX(-50%) translateY(-100%);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .bead {
+      position: absolute;
+      height: var(--bead-height);
+      width: var(--bead-width);
+      border: 1px solid;
+      border-radius: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid var(--border-color);
+      background-color: var(--bead-blue);
+      overflow: hidden;
+      transition: all ease 0.25s;
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        border-radius: 500px;
+        border: 0px solid transparent;
+      }
+      &::before {
+        height: 100%;
+        width: 104%;
+        bottom: 0px;
+        border-bottom-width: 4px;
+        border-style: solid;
+        border-bottom-color: rgba(0, 0, 0, 0.45);
+        transform: rotate(35deg);
+      }
+      &::after {
+        height: 70%;
+        width: 70%;
+        border-top-color: #ffffff;
+        border-width: 2px;
+        top: 3px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        transform: rotate(45deg);
+      }
+    }
+  }
+  &-bottom {
+    .bead-line {
+      .bead {
+        @each $colorKey, $colorValue in $bottomBeadColors {
+          $index: index(($bottomBeadColors), ($colorKey $colorValue));
+          &:nth-child(#{$index}) {
+            background-color: var(#{$colorValue});
+          }
+        }
+        @for $i from 1 through 4 {
+          &:nth-child(#{$i}) {
+            bottom: $beadHeight * (4 - $i);
+          }
+        }
+      }
+    }
+  }
+  &-top {
+    .bead-line {
+      .bead {
+        background-color: var(--bead-teal);
+        top: 0;
+      }
+    }
+  }
+}
+
+.beads-container-top {
+  .bead-line {
+    &.five {
+      .bead {
+        top: calc(95% - var(--bead-height));
+      }
+    }
+  }
+}
+.beads-container-bottom {
+  .bead-line {
+    @each $key, $value in $bottomClasses {
+      $index: index(($bottomClasses), ($key $value));
+      &.#{$key} {
+        @for $i from 1 through $index {
+          .bead:nth-child(#{$i}) {
+            bottom: calc(100% - #{($i * $beadHeight)});
+          }
+        }
+      }
+    }
+  }
+}
